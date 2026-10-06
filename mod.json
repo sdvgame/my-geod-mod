@@ -1,0 +1,65 @@
+{
+    "geode": "v5.0.0",
+    "gd": {
+        "win": "2.2081",
+        "android": "2.2081"
+    },
+    "id": "froge54.trail-tracker",
+    "name": "Trail Tracker",
+    "version": "v1.0.0",
+    "developer": "froge54",
+    "description": "Показывает точки прыжков и след движения",
+    "settings": {
+        "circle-color": {
+            "type": "color",
+            "name": "Цвет кружка прыжка",
+            "default": [255, 255, 255]
+        },
+        "circle-size": {
+            "type": "float",
+            "name": "Размер кружка",
+            "default": 12.0,
+            "min": 4.0,
+            "max": 40.0
+        },
+        "outline-enabled": {
+            "type": "bool",
+            "name": "Включить обводку",
+            "default": true
+        },
+        "outline-color": {
+            "type": "color",
+            "name": "Цвет обводки",
+            "default": [0, 0, 0]
+        },
+        "y-offset": {
+            "type": "float",
+            "name": "Смещение следа по Y (от игрока)",
+            "default": 0.0,
+            "min": -10.0,
+            "max": 10.0
+        },
+        "trail-color": {
+            "type": "color",
+            "name": "Цвет линии следа",
+            "default": [0, 255, 0]
+        },
+        "trail-thickness": {
+            "type": "float",
+            "name": "Толщина линии",
+            "default": 2.0,
+            "min": 0.5,
+            "max": 10.0
+        },
+        "show-in-level": {
+            "type": "bool",
+            "name": "Показывать в обычной игре",
+            "default": false
+        },
+        "show-jumps-in-level": {
+            "type": "bool",
+            "name": "Показывать прыжки в обычной игре",
+            "default": false
+        }
+    }
+}
