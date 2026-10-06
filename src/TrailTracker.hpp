@@ -22,5 +22,5 @@ public:
 private:
     std::vector<JumpPoint> m_jumps;
     std::vector<CCPoint> m_trail;
-    CCNode* m_drawNode = nullptr;
+    CCDrawNode* m_drawNode = nullptr;
 };
