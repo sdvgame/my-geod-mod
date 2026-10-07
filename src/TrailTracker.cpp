@@ -32,6 +32,7 @@ void TrailTracker::removeNodes() {
 void TrailTracker::drawOnLayer(CCNode* layer) {
     auto mod = Mod::get();
 
+    // Создаём ноду для рисования, если её нет
     if (!m_drawNode) {
         m_drawNode = CCDrawNode::create();
         layer->addChild(m_drawNode, 9999);
