@@ -2,6 +2,7 @@
 #include <Geode/modify/PlayerObject.hpp>
 #include <Geode/modify/PlayLayer.hpp>
 #include <Geode/modify/LevelEditorLayer.hpp>
+#include <Geode/modify/MenuLayer.hpp>
 #include "TrailTracker.hpp"
 
 using namespace geode::prelude;
@@ -76,5 +77,47 @@ class $modify(PlayHook, PlayLayer) {
     void resetLevel() {
         TrailTracker::get()->clearAll();
         PlayLayer::resetLevel();
+    }
+};
+
+// === 4. Кнопка в главном меню ===
+class $modify(MenuHook, MenuLayer) {
+    bool init() {
+        if (!MenuLayer::init())
+            return false;
+
+        // Ищем нижнее меню, куда игра добавляет свои кнопки
+        auto bottomMenu = this->getChildByID("bottom-menu");
+        if (!bottomMenu) return true;
+
+        // Создаём спрайт для кнопки (пока используем стандартную иконку Geode)
+        auto sprite = CircleButtonSprite::createWithSprite(
+            "geode.loader/mod-button.png",
+            1.0f,
+            CircleBaseColor::Green,
+            CircleBaseSize::Medium
+        );
+
+        // Создаём кнопку-заглушку
+        auto button = CCMenuItemSpriteExtra::create(
+            sprite,
+            this,
+            menu_selector(MenuHook::onTrailTrackerButton)
+        );
+
+        button->setID("trail-tracker-button"_spr);
+        bottomMenu->addChild(button);
+
+        // Пересчитываем расположение кнопок в меню
+        if (auto menu = typeinfo_cast<CCMenu*>(bottomMenu)) {
+            menu->updateLayout();
+        }
+
+        return true;
+    }
+
+    // Обработчик нажатия (пока просто уведомление)
+    void onTrailTrackerButton(CCObject* sender) {
+        Notification::create("Trail Tracker: Settings coming soon!", NotificationIcon::Info)->show();
     }
 };
