@@ -38,10 +38,12 @@ class $modify(EditorHook, LevelEditorLayer) {
 
         auto tracker = TrailTracker::get();
 
+        // Записываем след только когда игрок реально существует
         if (auto player = this->m_player1) {
             tracker->addTrailPoint(player->getPosition());
         }
 
+        // Рисуем поверх всего
         tracker->drawOnLayer(this);
     }
 
@@ -86,19 +88,14 @@ class $modify(MenuHook, MenuLayer) {
         if (!MenuLayer::init())
             return false;
 
-        // Ищем нижнее меню, куда игра добавляет свои кнопки
         auto bottomMenu = this->getChildByID("bottom-menu");
         if (!bottomMenu) return true;
 
-        // Создаём спрайт для кнопки (пока используем стандартную иконку Geode)
-        auto sprite = CircleButtonSprite::createWithSprite(
-            "geode.loader/mod-button.png",
-            1.0f,
-            CircleBaseColor::Green,
-            CircleBaseSize::Medium
-        );
+        auto sprite = CCSprite::create("tracker-icon.png"_spr);
+        if (!sprite) {
+            sprite = CCSprite::createWithSpriteFrameName("GJ_optionsBtn_001.png");
+        }
 
-        // Создаём кнопку-заглушку
         auto button = CCMenuItemSpriteExtra::create(
             sprite,
             this,
@@ -108,7 +105,6 @@ class $modify(MenuHook, MenuLayer) {
         button->setID("trail-tracker-button"_spr);
         bottomMenu->addChild(button);
 
-        // Пересчитываем расположение кнопок в меню
         if (auto menu = typeinfo_cast<CCMenu*>(bottomMenu)) {
             menu->updateLayout();
         }
@@ -116,8 +112,8 @@ class $modify(MenuHook, MenuLayer) {
         return true;
     }
 
-    // Обработчик нажатия (пока просто уведомление)
     void onTrailTrackerButton(CCObject* sender) {
-        Notification::create("Trail Tracker: Settings coming soon!", NotificationIcon::Info)->show();
+        // Пока просто открываем настройки мода Geode
+        geode::openModSettings(Mod::get());
     }
 };
