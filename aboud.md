@@ -1,11 +1,10 @@
 # Trail Tracker
 
-Мод для Geometry Dash, который показывает:
-- Точки прыжков (нажатий на экран) в тесте редактора и в обычной игре
-- След движения игрока (траекторию) с настройкой цвета и толщины
-- Смещение по Y относительно игрока
+A mod for Geometry Dash that shows:
+- Jump indicators (screen taps) in the editor playtest and in normal gameplay
+- A movement trail with customizable color and thickness
+- Y offset relative to the player
 
-## Настройки
-Все настройки доступны в меню мода Geode.
-
-Авторы мода: Deep Seek, froge54.
+## Settings
+All settings are available in the Geode mod menu.
+mod by: Deep Seek and froge54
