@@ -14,19 +14,25 @@ class $modify(MyPlayerObject, PlayerObject) {
 
         if (button != PlayerButton::Jump) return;
 
+        log::info("Jump button pressed!");
+
         auto tracker = TrailTracker::get();
         auto mod = Mod::get();
 
         bool inEditor = LevelEditorLayer::get() != nullptr;
         bool inPlay = PlayLayer::get() != nullptr;
 
+        log::info("inEditor: {}, inPlay: {}", inEditor, inPlay);
+
         if (inEditor) {
             tracker->addJumpPoint(this->getPosition(), !this->m_isSecondPlayer);
+            log::info("Jump point added in editor");
             return;
         }
 
         if (inPlay && mod->getSettingValue<bool>("show-jumps-in-level")) {
             tracker->addJumpPoint(this->getPosition(), !this->m_isSecondPlayer);
+            log::info("Jump point added in play");
         }
     }
 };
@@ -35,6 +41,11 @@ class $modify(MyPlayerObject, PlayerObject) {
 class $modify(EditorHook, LevelEditorLayer) {
     void update(float dt) {
         LevelEditorLayer::update(dt);
+
+        static int counter = 0;
+        if (counter++ % 60 == 0) {
+            log::info("EditorHook::update called! Player: {}", this->m_player1 != nullptr);
+        }
 
         auto tracker = TrailTracker::get();
 
@@ -46,6 +57,7 @@ class $modify(EditorHook, LevelEditorLayer) {
     }
 
     void onPlaytest() {
+        log::info("onPlaytest called");
         TrailTracker::get()->clearAll();
         LevelEditorLayer::onPlaytest();
     }
@@ -55,6 +67,7 @@ class $modify(EditorHook, LevelEditorLayer) {
 class $modify(PlayHook, PlayLayer) {
     bool init(GJGameLevel* level, bool useReplay, bool dontAddToHistory) {
         if (!PlayLayer::init(level, useReplay, dontAddToHistory)) return false;
+        log::info("PlayLayer::init called");
         TrailTracker::get()->clearAll();
         return true;
     }
@@ -86,11 +99,17 @@ class $modify(MenuHook, MenuLayer) {
         if (!MenuLayer::init())
             return false;
 
+        log::info("MenuLayer::init called");
+
         auto bottomMenu = this->getChildByID("bottom-menu");
-        if (!bottomMenu) return true;
+        if (!bottomMenu) {
+            log::warn("bottom-menu not found!");
+            return true;
+        }
 
         auto sprite = CCSprite::create("tracker-icon.png"_spr);
         if (!sprite) {
+            log::warn("tracker-icon.png not found, using fallback");
             sprite = CCSprite::createWithSpriteFrameName("GJ_optionsBtn_001.png");
         }
 
@@ -106,6 +125,8 @@ class $modify(MenuHook, MenuLayer) {
         if (auto menu = typeinfo_cast<CCMenu*>(bottomMenu)) {
             menu->updateLayout();
         }
+
+        log::info("Trail Tracker button added to main menu");
 
         return true;
     }
