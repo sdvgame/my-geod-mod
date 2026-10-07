@@ -9,6 +9,11 @@
     "version": "v1.0.0",
     "developer": "froge54",
     "description": "Shows jump indicators and a movement trail in the editor and in normal gameplay.",
+    "resources": {
+        "sprites": [
+            "resources/tracker-icon.png"
+        ]
+    },
     "settings": {
         "circle-color": {
             "type": "color",
