@@ -32,7 +32,6 @@ void TrailTracker::removeNodes() {
 void TrailTracker::drawOnLayer(CCNode* layer) {
     auto mod = Mod::get();
 
-    // Создаём ноду для рисования, если её нет
     if (!m_drawNode) {
         m_drawNode = CCDrawNode::create();
         layer->addChild(m_drawNode, 9999);
@@ -40,9 +39,25 @@ void TrailTracker::drawOnLayer(CCNode* layer) {
 
     m_drawNode->clear();
 
-    // --- Линия следа ---
+    // --- Читаем настройки ---
     auto trailColor = mod->getSettingValue<ccColor3B>("trail-color");
     auto trailThickness = mod->getSettingValue<double>("trail-thickness");
+    auto circleColor = mod->getSettingValue<ccColor3B>("circle-color");
+    auto circleSize = mod->getSettingValue<double>("circle-size");
+    bool outlineEnabled = mod->getSettingValue<bool>("outline-enabled");
+    auto outlineColor = mod->getSettingValue<ccColor3B>("outline-color");
+    float yOffset = mod->getSettingValue<double>("y-offset");
+
+    // --- Логируем раз в ~60 кадров, чтобы не спамить ---
+    static int logCounter = 0;
+    if (logCounter++ % 60 == 0) {
+        log::info("TrailColor: R={} G={} B={}", trailColor.r, trailColor.g, trailColor.b);
+        log::info("CircleColor: R={} G={} B={}", circleColor.r, circleColor.g, circleColor.b);
+        log::info("CircleSize: {}", circleSize);
+        log::info("TrailThickness: {}", trailThickness);
+        log::info("Jumps: {}, Trail: {}", m_jumps.size(), m_trail.size());
+    }
+
     ccColor4F trailCol4 = {
         trailColor.r / 255.f,
         trailColor.g / 255.f,
@@ -55,13 +70,6 @@ void TrailTracker::drawOnLayer(CCNode* layer) {
             m_drawNode->drawSegment(m_trail[i - 1], m_trail[i], trailThickness, trailCol4);
         }
     }
-
-    // --- Кружки прыжков ---
-    auto circleColor = mod->getSettingValue<ccColor3B>("circle-color");
-    auto circleSize = mod->getSettingValue<double>("circle-size");
-    bool outlineEnabled = mod->getSettingValue<bool>("outline-enabled");
-    auto outlineColor = mod->getSettingValue<ccColor3B>("outline-color");
-    float yOffset = mod->getSettingValue<double>("y-offset");
 
     ccColor4F circCol4 = {
         circleColor.r / 255.f,
