@@ -30,8 +30,7 @@ jobs:
         with:
           target: ${{ matrix.config.target }}
           combine: true
-          android-ndk-version: 27.1.12297006
-          configure-args: "-DCMAKE_MAKE_PROGRAM=/usr/bin/ninja"
+          configure-args: "-DCMAKE_MAKE_PROGRAM=/usr/bin/ninja -DANDROID_STL=c++_static"
 
   package:
     runs-on: ubuntu-latest
